@@ -35,9 +35,7 @@
         ImageToggle:
             background_color: [0,0,0,0]
             size_hint_max_x:  100 
-            source:           "microfonoff.png"
-            on_press:         self.source = "microfonon.png"
-            on_release:       self.source = "microfonoff.png"
+            source:           "microphoneoff.png" if self.state=='normal' else "microphoneon.png"
         Button:
             background_color: [0,0,0,0]
             text:             'Schlummerm'
