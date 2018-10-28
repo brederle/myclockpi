@@ -35,7 +35,7 @@
         ImageToggle:
             background_color: [0,0,0,0]
             size_hint_max_x:  100 
-            source:           "microphoneoff.png" if self.state=='normal' else "microphoneon.png"
+            source:           "./simpledigiclock/microphoneoff.png" if self.state=='normal' else "./simpledigiclock/microphoneon.png"
         Button:
             background_color: [0,0,0,0]
             text:             'Schlummerm'
@@ -43,6 +43,6 @@
         ImageButton:
             background_color: [0,0,0,0]
             size_hint_max_x:  100
-            source: "settings.png"
+            source: "./simpledigiclock/settings.png"
             #center_x: self.parent.center_x
             #center_y: self.parent.center_y
