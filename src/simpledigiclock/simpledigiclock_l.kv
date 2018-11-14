@@ -1,29 +1,32 @@
 <ImageButton@ButtonBehavior+Image>
 <ImageToggle@ToggleButtonBehavior+Image>
 
-<SimpleDigiClock>:
+<SimpleDigiClockLandscape>:
     dateValue:   dateField   
     clockValue:  clockField
     orientation: 'vertical'
-    background:  'black'
+    backColor:  [0,0,0,0]
+    frontColor: [1,1,1,1]
+    clockColor: [1.0,0.34,0.0,1.0]  # red orange
+    #clockColor:  rgba: 0.80, 0.98, 0.02, 1.0 # lemon yellow
+    
     Button:
         id:                clockField
-        background_color:  [0,0,0,0]
+        background_color:  root.backColor
         halign:            'center'
         valign:            'bottom' 
-        # color:             (0.80, 0.98, 0.02, 1.0) # lemon yellow
-        color:             (1.0, 0.34, 0.2, 1.0) # red orange
+        color:             root.clockColor 
         #padding_y:        10
         text:              '[size=256]%H:%M[/size][size=64]:%S[/size]'
         markup:            True
 
     Button:
         id:                dateField
-        background_color:  [0,0,0,0]
+        background_color:  root.backColor 
         halign:            'center'
         valign:            'top'
         size_hint_max_y:   100
-        color:             (1.0, 0.34, 0.2, 1.0) # red orange
+        color:             root.clockColor
         text:              '%A, %d. %B %Y'
         font_size:         '42sp'
         markup:            True
@@ -33,15 +36,19 @@
         orientation:       'horizontal'
         background:        'black'
         ImageToggle:
-            background_color: [0,0,0,0]
+            background_color: root.backColor
+            color:            root.frontColor
             size_hint_max_x:  100 
             source:           "./simpledigiclock/microphoneoff.png" if self.state=='normal' else "./simpledigiclock/microphoneon.png"
+
         Button:
-            background_color: [0,0,0,0]
+            background_color: root.backColor
             text:             'Schlummerm'
+            color:            root.frontColor
             font_size:        '42sp'
         ImageButton:
-            background_color: [0,0,0,0]
+            background_color: root.backColor
+            color:            root.frontColor
             size_hint_max_x:  100
             source: "./simpledigiclock/settings.png"
             #center_x: self.parent.center_x
