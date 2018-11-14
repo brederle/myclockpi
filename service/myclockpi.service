@@ -1,0 +1,13 @@
+[Unit]
+Description=My Raspberry Pi multimedia clock
+After=network.target
+
+[Service]
+Type=simple
+Restart=always
+Environment=KIVY_GL_BACKEND=gl SDL_FBDEV=/dev/fb SDL_MOUSEDRV=TSLIB SDL_MOUSEDEV=/dev/input/touchscreen KIVY_AUDIO=ffpyplayer KIVY_VIDEO=ffpyplayer LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH"
+User=ticktack
+ExecStart=/usr/bin/python3 /home/ticktack/myclockpi/src/main.py
+
+[Install]
+WantedBy=multi-user.target
