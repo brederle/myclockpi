@@ -2,18 +2,28 @@ from datetime import datetime
 from kivy.app import App
 from kivy.clock import Clock
 
-import RPi.GPIO as GPIO
-
-from simpledigiclock.simpledigiclock import SimpleDigiClock
+from myclockpi.clockcontext import ClockContext
 from myclockpi.sensor_brightness import SensorBrightness
 from myclockpi.sensor_direction import SensorDirection
 
+# TODO: register clockfaces automatically
+from simpledigiclock.simpledigiclock import SimpleDigiClock
 
+from streamalarm.streamalarm import StreamAlarm
 
 class ClockControllerApp(App):
     '''
     Main class to control the clock face, alarms and all the possible settings.
     '''
+
+    def __init__(self):
+        self.context = ClockContext()        
+        #self.testalarm = StreamAlarm("http://www.rockantenne.de/webradio/channels/soft-rock.m3u")
+        self.testalarm = StreamAlarm("http://mp3channels.webradio.rockantenne.de/rockantenne.aac")
+        #self.testalarm = StreamAlarm("/home/ticktack/music/Heaven_s Basement - The Long Goodbye.mp3")
+        self.brightness = None
+        self.direction  = None
+        super().__init__()
 
     def changeBrightness(self, isLight):
         '''
@@ -21,7 +31,7 @@ class ClockControllerApp(App):
     
         :param Boolean isLight: true is daylight is detected, False if dark
         '''
-        self.clockFace.on_brightness(isLight) 
+        self.clockFace.on_brightness(self.context, isLight) 
 
     def changeDirection(self, direction):
         '''
@@ -29,46 +39,50 @@ class ClockControllerApp(App):
     
         :param Directions direction: one of the main clock display directions
         '''
-        self.clockFace.on_direction(direction) 
+        self.clockFace.on_direction(self.context, direction) 
 
-    def _initAmplifier(self):
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(18, GPIO.OUT, initial=0)
-        GPIO.output(18, GPIO.LOW)
+    def changeDate(self, date):
+        '''
+        Change clock face depending on value of direction sensor 
+    
+        :param Directions direction: one of the main clock display directions
+        '''
+        self.clockFace.on_date(self.context, date)
+
+    def changeTime(self, time):
+        '''
+        Change clock face depending on value of direction sensor 
+    
+        :param Directions direction: one of the main clock display directions
+        '''
+        self.clockFace.on_time(self.context, time)
+
 
     def updateClockFace(self, delta):
         newDateTime = datetime.now()
 
-        newBrightness = brightnessSensor.isDayLight()
+        newBrightness = self.context.brightnessSensor.isDayLight()
         if (self.brightness != newBrightness):
-            changeBrightness(newBrightness)
+            self.changeBrightness(newBrightness)
         self.brightness = newBrightness
 
-        newDirection = directionSensor.getDirection()
-        if (self.direction != newDriection):
-            changeDirection(newDirection)
-        self.direction = newDirection
+        #newDirection = self.context.directionSensor.getDirection()
+        #if (self.direction != newDirection):
+        #    self.changeDirection(newDirection)
+        #self.direction = newDirection
 
         if (self.currentTime.second != newDateTime.second):
-            self.clockFace.changeTime(newDateTime)
+           self.changeTime(newDateTime)
         if (self.currentTime.day != newDateTime.day):
-           self.clockface.changeDate(newDateTime)
+           self.changeDate(newDateTime)
         self.currentTime = newDateTime
 
 
-
     def build(self):
-        self._initAmplifier()
-        
-        self.brightnessSensor = SensorBrightness()
-        self.brightness = None
-
-        self.directionSensor = SensorDirection()
-        self.direction = None
-
         self.currentTime = datetime.now()
         self.clockFace = SimpleDigiClock()
-        self.clockFace.setTime(self.currentTime)
-        self.clockFace.setDate(self.currentTime)
+        self.changeTime(self.currentTime)
+        self.changeDate(self.currentTime)
         Clock.schedule_interval(self.updateClockFace, 0.2)
-        return self.clockFace
+        self.testalarm.on_alarm(self.context)
+        return self.clockFace.currentLayout

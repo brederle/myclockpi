@@ -23,30 +23,50 @@ class SensorDirection:
     '''
     Class for handling the gyro and detecting display direction
     '''
-    def __init__(self):
+    def __init__(self, address=DIRECTION_ADDRESS):
         '''
         TODO: Build a gyro calibration fuction
         '''
-        i2c = SMBus(1)
-        i2c.write_byte_data(DIRECTION_ADDRESS, DIRECTION_REG_POWER1, 
-                            DIRECTION_SLEEP)
+        self.i2c     = SMBus(1)
+        self.address = address
+        #self.i2c.write_byte_data(self.address, DIRECTION_REG_POWER1, 
+        #                         DIRECTION_SLEEP)
+        self.i2c.write_byte_data(self.address, DIRECTION_REG_POWER1, 0)
+
+
+
+    def _read_i2c_word(self, register):
+        """Read two i2c registers and combine them.
+        register -- the first register to read from.
+        Returns the combined read results.
+        """
+        # Read the data from the registers
+        high = self.i2c.read_byte_data(self.address, register)
+        low  = self.i2c.read_byte_data(self.address, register + 1)
+
+        value = (high << 8) + low
+
+        if (value >= 0x8000):
+            return -((65535 - value) + 1)
+        else:
+            return value
 
     def getDirection(self):
         '''
         Get sensor brigthness and return true if daylight is detected
         '''
         # wake up
-        i2c.write_byte_data(DIRECTION_ADDRESS, DIRECTION_REG_POWER1, 0)
+        # self.i2c.write_byte_data(self.address, DIRECTION_REG_POWER1, 0)
 
         # measure
-        x = i2c.read_word_data(DIRECTION_ADDRESS, DIRECTION_REG_GYROX)
-        y = i2c.read_word_data(DIRECTION_ADDRESS, DIRECTION_REG_GYROY)
-        z = i2c.read_word_data(DIRECTION_ADDRESS, DIRECTION_REG_GYROZ)
+        x = self._read_i2c_word(DIRECTION_REG_GYROX)
+        y = self._read_i2c_word(DIRECTION_REG_GYROY)
+        z = self._read_i2c_word(DIRECTION_REG_GYROZ)
 
-        Logger.debug("Direction=" + x + "," + y + "," + z)
+        Logger.debug("Direction=" + str(x/131) + "," + str(y/131) + "," + str(z/131))
 
         # sleep
-        i2c.write_byte_data(DIRECTION_ADDRESS, DIRECTION_REG_POWER1, 
-                            DIRECTION_SLEEP)
+        # self.i2c.write_byte_data(self.address, DIRECTION_REG_POWER1, 
+        #                        DIRECTION_SLEEP)
 
         return Directions.PORTRAIT 
