@@ -33,14 +33,17 @@
         orientation:       'horizontal'
         background:        'black'
         ImageToggle:
+            id:               micButton
             background_color: [0,0,0,0]
             size_hint_max_x:  100 
             source:           "./simpledigiclock/microphoneoff.png" if self.state=='normal' else "./simpledigiclock/microphoneon.png"
         Button:
+            id:               sleepButton
             background_color: [0,0,0,0]
             text:             'Schlummerm'
             font_size:        '42sp'
         ImageButton:
+            id:               settingsButton
             background_color: [0,0,0,0]
             size_hint_max_x:  100
             source: "./simpledigiclock/settings.png"

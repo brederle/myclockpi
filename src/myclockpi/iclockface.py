@@ -7,6 +7,12 @@ class IClockFace(ABC):
     '''
     Define the interface for clock faces.
     '''
+    @abstractmethod
+    def register_actions(self, on_settings, on_sleep, on_stop, on_mic ):
+        '''
+        Register callback that can and should be handled by clockcontroller.
+        '''
+        pass
 
     @abstractmethod
     def on_brightness(self, context, isLight):

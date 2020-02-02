@@ -1,0 +1,87 @@
+#:set setting_font_size sp(24)
+
+# adapted from kivy/kivy/data/style.kv
+<-SettingItem>:
+    size_hint: .25, None
+    height: labellayout.texture_size[1] + dp(10)
+    content: content
+    canvas:
+        Color:
+            rgba: 47 / 255., 167 / 255., 212 / 255., self.selected_alpha
+        Rectangle:
+            pos: self.x, self.y + 1
+            size: self.size
+        Color:
+            rgb: .2, .2, .2
+        Rectangle:
+            pos: self.x, self.y - 2
+            size: self.width, 1
+
+    BoxLayout:
+        pos: root.pos
+
+        Label:
+            size_hint_x: .75
+            id: labellayout
+            markup: True
+            text: u'{0}\n[color=999999]{1}[/color]'.format(root.title or '', root.desc or '')
+            font_size: setting_font_size
+            text_size: self.width - 32, None
+
+        BoxLayout:
+            id: content
+            size_hint_x: .25
+
+<SettingBoolean>:
+    Switch:
+        text: root.value or ''
+        pos: root.pos
+        font_size: setting_font_size
+
+<SettingString>:
+    Label:
+        text: root.value or ''
+        pos: root.pos
+        font_size: setting_font_size
+
+<SettingPath>:
+    Label:
+        text: root.value or ''
+        pos: root.pos
+        font_size: setting_font_size
+
+<SettingOptions>:
+    Label:
+        text: root.value or ''
+        pos: root.pos
+        font_size: setting_font_size
+
+<SettingTitle>:
+    font_size: setting_font_size
+
+<-MenuSpinner>:
+    orientation: 'horizontal'
+    size_hint_y: None
+    height: '50dp'
+    spinner: spinner
+    spinner_text: spinner.text
+    close_button: button
+    Spinner:
+        id: spinner
+        font_size: setting_font_size
+    Button:
+        text: 'Close'
+        id: button
+        size_hint_x: None
+        width: min(dp(200), 0.4*root.width)
+        font_size: setting_font_size
+
+#<MenuSpinner>:
+#    Spinner:
+#        id: spinner
+#        font_size: setting_font_size
+#    Button:
+#        id: button
+#        font_size: setting_font_size
+
+

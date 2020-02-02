@@ -5,6 +5,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObjectProperty, ListProperty
 
 from myclockpi.iclockface import IClockFace
+#from myclockpi.settings import ClockSettings
 
 class SimpleDigiClockLayout(BoxLayout):
     clockValue  = ObjectProperty(None)
@@ -47,6 +48,24 @@ class SimpleDigiClock(IClockFace):
         self.landscapeLayout = SimpleDigiClockLandscape()
         self.currentLayout   = self.landscapeLayout
 
+    def register_actions(self, on_settings, on_sleep, on_stop, on_mic ):
+        '''
+        Register callback that can and should be handled by clockcontroller
+        for both layouts.
+        '''
+        self.portraitLayout.ids.clockField.bind(on_release=on_stop)
+        self.portraitLayout.ids.dateField.bind(on_release=on_stop)
+        self.portraitLayout.ids.micButton.bind(on_release=on_mic)
+        self.portraitLayout.ids.sleepButton.bind(on_release=on_sleep)
+        self.portraitLayout.ids.settingsButton.bind(on_release=on_settings)
+        
+        self.landscapeLayout.ids.clockField.bind(on_release=on_stop)
+        self.landscapeLayout.ids.dateField.bind(on_release=on_stop)
+        self.landscapeLayout.ids.micButton.bind(on_release=on_mic)
+        self.landscapeLayout.ids.sleepButton.bind(on_release=on_sleep)
+        self.landscapeLayout.ids.settingsButton.bind(on_release=on_settings)
+
+
 
     def on_brightness(self, context, isLight):
         Logger.info("Brightness: " + str(isLight))
@@ -76,3 +95,9 @@ class SimpleDigiClock(IClockFace):
         tm = newTime.strftime(self.currentLayout.dateFormat)
         self.currentLayout.dateValue.text = tm
 
+    def on_open_settings(self):
+        '''
+        React on push of settings
+        '''
+        #self. 
+        pass
