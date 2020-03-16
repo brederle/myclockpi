@@ -1,60 +1,51 @@
 import json
+import datetime
 
-from myclockpi.settings.clock import ClockConfig
-from myclockpi.settings.alarm import AlarmConfig
-from myclockpi.settings.effect import AlarmEffectConfig
+from myclockpi.settings.data import ClockSettings, AlarmConfig, EffectConfig
 
-
-class ClockSettings:
-    def __init__(self):
-       self.clock  = ClockConfig()
-       self.alarms = []
-       self.skins = []
-       self.effects = []
-
-class ClockSettingsJsonRepo
+class ClockSettingsJsonRepo:
 
     @staticmethod
     def _as_settings(values):
-       	if 'alarms' in values:
-            # FIXME: use face as marking label later
-            settings = ClockSettings()          
-            settings.clock = ClockConfig(
-            face = values['face'])
-            for alarm in values['alarms']:
-                settings.alarms.add(AlarmConfig(
-                   name = alarm['name'],
-                   time = alarm['time'],
-                   days = alarm['days'],
-                   alarm_type = alarm['type'],
-                   effect = alarm['effect'],
-                   enabled = bool(alarm['enabled']))
-            for effect in values['effects']:
-                settings.effects.add(AlarmEffectConfig(
-                    name = effect['name'],
-                    effect_type = effect['type'],
-                    links = effect['links']
-                ))
+        if 'face' in values:
+            # this mandatory element marks top-level structure
+            settings = ClockSettings(face=values['face']) 
+            if 'alarms' in values:
+                for alarm in values['alarms']:
+                    settings.alarms.append(AlarmConfig(**alarm))
+            if 'effects' in values:
+                for effect in values['effects']:
+                    settings.effects.append(EffectConfig(**effect))
             return settings
         else:
             return values
 
-
-    def __init__(self, path):
-	self.jsonPath = path
-        self.settings = ClockSettings()          
-
-    def load(self):
-        with open(self.path, 'r') as jsonfile:
-            cls.settings = json.load(jsonfile, )                
+    @classmethod    
+    def load(cls, path, default={}):
+        '''Load myclockpi json file given the filepath
+           :param path  file path to json
+           :param default default setting to use if no file is found'''
+        try:
+            with open(path, 'r') as jsonfile:
+                cls.settings = json.load(jsonfile,
+                        object_hook=cls._as_settings)
+        except FileNotFoundError:
+            cls.settings = default
         return cls.settings
 
-    def store(self, settings=None, path=""):
-        if not settings:
-            settings = self.settings
-        else:
-            self.settings = settings
+    class ObjectEncoder(json.JSONEncoder):
+        TIME_FORMAT = "%H:%M"
+        def default(self, obj):
+            if isinstance(obj, datetime.time):
+                return obj.strftime(self.TIME_FORMAT)
+            elif isinstance(obj, object):
+                return vars(obj)
+            else:
+                # Let the base class default method raise the TypeError
+                return json.JSONEncoder.default(self, obj)
 
+    @classmethod
+    def store(cls, settings, path):
         with open(path, 'w') as jsonfile:
-            json.dump(self..settings, jsonfile)
-        
+            json.dump(settings.__dict__, jsonfile,
+                cls=cls.ObjectEncoder, indent=2)
