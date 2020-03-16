@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
-from myclockpi.clockcontext import ClockContext
+from myclockpi.engine.clockcontext import ClockContext
+
 
 class IAlarmEffect(ABC):
     '''
@@ -21,4 +22,3 @@ class IAlarmEffect(ABC):
         Stop effect
         '''
         pass
-       

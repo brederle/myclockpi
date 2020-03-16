@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from myclockpi.clockcontext import ClockContext
+from myclockpi.engine.clockcontext import ClockContext
 
 
 class IClockFace(ABC):
@@ -8,7 +8,7 @@ class IClockFace(ABC):
     Define the interface for clock faces.
     '''
     @abstractmethod
-    def register_actions(self, on_settings, on_sleep, on_stop, on_mic ):
+    def register_actions(self, on_settings, on_sleep, on_stop, on_mic):
         '''
         Register callback that can and should be handled by clockcontroller.
         '''
@@ -18,7 +18,7 @@ class IClockFace(ABC):
     def on_brightness(self, context, isLight):
         '''
         Change clock face depending on value of brightness sensor 
-                        
+
         :param ClockContext context: the context with all accessible sensors/actors
         :param Boolean isLight: true is daylight is detected, False if dark
         '''
@@ -28,13 +28,13 @@ class IClockFace(ABC):
     def on_direction(self, context, direction):
         '''
         Change clock face depending on value of direction sensor 
-    
+
         :param ClockContext context: the context with all accessible sensors/actors
         :param Directions direction: one of the main clock display directions
         '''
         pass
 
-    @abstractmethod    
+    @abstractmethod
     def on_time(self, context, newTime):
         '''
         Show the new time, every second.

@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 
+
 class ActorSound:
 
     def __init__(self):
@@ -11,11 +12,11 @@ class ActorSound:
         GPIO.output(18, GPIO.LOW)
 
     def standby(self, state):
-       '''
-       Wake up amplifier or put to sleep
-       state: true if amplifier is asleep, false to activate 
-       '''
-       if state:
-          GPIO.output(18, GPIO.LOW)
-       else:
-          GPIO.output(18, GPIO.HIGH)
+        '''
+        Wake up amplifier or put to sleep
+        state: true if amplifier is asleep, false to activate 
+        '''
+        if state:
+            GPIO.output(18, GPIO.LOW)
+        else:
+            GPIO.output(18, GPIO.HIGH)

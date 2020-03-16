@@ -1,14 +1,16 @@
 import RPi.GPIO as GPIO
 
+
 class SensorBrightness:
     '''
     Class for handling the brightness sensor
     '''
+
     def __init__(self):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(4, GPIO.IN)
-        self.state            = False
-        self._numLights       = 0
+        self.state = False
+        self._numLights = 0
         self._numMeasurements = 0
 
     def isDayLight(self):
@@ -24,7 +26,6 @@ class SensorBrightness:
         if self._numMeasurements == 8:
             self.state = True if self._numLights > 5 else False
             self._numMeasurements = 0
-            self._numLights       = 0               
+            self._numLights = 0
 
         return self.state
-
