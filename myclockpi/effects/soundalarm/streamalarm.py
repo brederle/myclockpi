@@ -1,5 +1,5 @@
-from myclockpi.ialarmeffect import IAlarmEffect 
-from soundalarm.audio_ffpystream import StreamFFPy
+from myclockpi.engine.ialarmeffect import IAlarmEffect 
+from myclockpi.effects.soundalarm.audio_ffpystream import StreamFFPy
 
 from kivy.core.audio import SoundLoader 
 
