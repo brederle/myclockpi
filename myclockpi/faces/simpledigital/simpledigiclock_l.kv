@@ -40,7 +40,7 @@
             background_color: root.backColor
             color:            root.frontColor
             size_hint_max_x:  100 
-            source:           "./simpledigiclock/microphoneoff.png" if self.state=='normal' else "./simpledigiclock/microphoneon.png"
+            source:           "./faces/simpledigital/microphoneoff.png" if self.state=='normal' else "./faces/simpledigital/microphoneon.png"
 
         Button:
             id:               sleepButton
@@ -53,7 +53,7 @@
             background_color: root.backColor
             color:            root.frontColor
             size_hint_max_x:  100
-            source: "./simpledigiclock/settings.png"
+            source: "./faces/simpledigital/settings.png"
             #on_release:       root.open_settings()
             #center_x: self.parent.center_x
             #center_y: self.parent.center_y

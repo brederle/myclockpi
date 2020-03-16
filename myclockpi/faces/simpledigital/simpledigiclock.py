@@ -4,7 +4,7 @@ from kivy.logger import Logger
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObjectProperty, ListProperty
 
-from myclockpi.iclockface import IClockFace
+from myclockpi.engine.iclockface import IClockFace
 #from myclockpi.settings import ClockSettings
 
 class SimpleDigiClockLayout(BoxLayout):
@@ -21,7 +21,7 @@ class SimpleDigiClockLayout(BoxLayout):
         self.dateFormat  = self.dateValue.text
 
 
-Builder.load_file("./simpledigiclock/simpledigiclock_l.kv")
+Builder.load_file("./faces/simpledigital/simpledigiclock_l.kv")
 
 class SimpleDigiClockLandscape(SimpleDigiClockLayout):
 
@@ -30,7 +30,7 @@ class SimpleDigiClockLandscape(SimpleDigiClockLayout):
 
 
 
-Builder.load_file("./simpledigiclock/simpledigiclock_p.kv")
+Builder.load_file("./faces/simpledigital/simpledigiclock_p.kv")
 
 class SimpleDigiClockPortrait(SimpleDigiClockLayout):
 
