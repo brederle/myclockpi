@@ -1,6 +1,8 @@
 import json
 import datetime
 
+from kivy.logger import Logger
+
 from myclockpi.settings.data import ClockSettings, AlarmConfig, EffectConfig
 
 class ClockSettingsJsonRepo:
@@ -29,7 +31,9 @@ class ClockSettingsJsonRepo:
             with open(path, 'r') as jsonfile:
                 cls.settings = json.load(jsonfile,
                         object_hook=cls._as_settings)
-        except FileNotFoundError:
+        except FileNotFoundError as err:
+            Logger.warn("Problems with " + path + "\n" + 
+                       err + "\nUsing default")
             cls.settings = default
         return cls.settings
 

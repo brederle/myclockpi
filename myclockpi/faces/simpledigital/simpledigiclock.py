@@ -5,6 +5,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObjectProperty, ListProperty
 
 from myclockpi.engine.iclockface import IClockFace
+from myclockpi.engine.alarm_manager import AlarmManager
 #from myclockpi.settings import ClockSettings
 
 class SimpleDigiClockLayout(BoxLayout):
@@ -95,9 +96,19 @@ class SimpleDigiClock(IClockFace):
         tm = newTime.strftime(self.currentLayout.dateFormat)
         self.currentLayout.dateValue.text = tm
 
+        atime = AlarmManager.str_alarm_relative(newTime)
+        Logger.info("Next alarm: " + atime)
+        if atime == "":
+            self.currentLayout.ids.sleepButton.text = ""
+        else:
+            self.currentLayout.ids.sleepButton.text = ""
+
+
+    def on_alarm(self, context, alarmconfig):
+        self.currentLayout.ids.sleepButton.text = context.str_next_alarm()
+
     def on_open_settings(self):
         '''
         React on push of settings
         '''
-        #self. 
         pass

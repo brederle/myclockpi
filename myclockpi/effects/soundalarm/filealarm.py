@@ -16,8 +16,8 @@ class FileAlarm(IAlarmEffect):
 
     def on_alarm(self, context):
         self.sound = SoundLoader.load(self._streamUrl)
-            context.soundActor.standby(False)
-            self.sound.play()
+        context.soundActor.standby(False)
+        self.sound.play()
         
 
     def stop(self, context):

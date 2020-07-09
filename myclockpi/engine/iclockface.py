@@ -52,3 +52,10 @@ class IClockFace(ABC):
         :param datetime newTime: the new datetime value
         '''
         pass
+
+    @abstractmethod
+    def on_alarm(self, context, alarmconfig):
+        '''
+        Called when alarm time is reached.
+        '''
+        pass
